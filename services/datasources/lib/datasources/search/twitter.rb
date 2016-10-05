@@ -37,7 +37,6 @@ module CartoDB
         CATEGORY_TERMS_KEY = :terms
 
         GEO_SEARCH_FILTER = 'has:geo'
-        PROFILE_GEO_SEARCH_FILTER = 'has:profile_geo'
         OR_SEARCH_FILTER  = 'OR'
 
         # Seconds to substract from current time as threshold to consider a time
@@ -47,7 +46,7 @@ module CartoDB
         # Gnip's 30 limit minus 'has:geo' one
         MAX_SEARCH_TERMS = 30 - 1
 
-        MAX_QUERY_SIZE   = 1024
+        MAX_QUERY_SIZE = 2048
 
         MAX_TABLE_NAME_SIZE = 30
 
@@ -276,7 +275,7 @@ module CartoDB
         end
 
         def clean_category(category)
-          category.gsub(" (#{GEO_SEARCH_FILTER} OR #{PROFILE_GEO_SEARCH_FILTER})", '')
+          category.gsub(" #{GEO_SEARCH_FILTER}", '')
                   .gsub(" #{OR_SEARCH_FILTER} ", ', ')
                   .gsub(/^\(/, '')
                   .gsub(/\)$/, '')
@@ -503,7 +502,7 @@ module CartoDB
             unless category[:terms].count == 0
               query[CATEGORY_TERMS_KEY] << '('
               query[CATEGORY_TERMS_KEY] << category[:terms].join(' OR ')
-              query[CATEGORY_TERMS_KEY] << ") (#{GEO_SEARCH_FILTER} OR #{PROFILE_GEO_SEARCH_FILTER})"
+              query[CATEGORY_TERMS_KEY] << ") #{GEO_SEARCH_FILTER}"
             end
 
             if query[CATEGORY_TERMS_KEY].length > MAX_QUERY_SIZE

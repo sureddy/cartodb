@@ -124,7 +124,6 @@ module CartoDB
 
       def query_payload(params)
         payload = {
-            publisher: 'twitter',
             PARAM_QUERY => params[PARAM_QUERY]
         }
         payload[PARAM_FROMDATE] = params[PARAM_FROMDATE] unless params[PARAM_FROMDATE].nil? or params[PARAM_FROMDATE].empty?
